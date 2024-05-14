@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:html';
 
 import 'package:flutter/material.dart';
@@ -13,6 +14,8 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   final Location _locationController = Location();
+
+  final Completer<GoogleMapController> _mapController = Completer<GoogleMapController>();
 
   static const LatLng _pDevaragudda = LatLng(14.669746789074516, 75.57459681455468);
   static const LatLng _pRaneBennur = LatLng(14.669746789074516, 75.57459681455468);
@@ -33,6 +36,8 @@ class _MapPageState extends State<MapPage> {
               child: Text('Loading..'),
             )
           : GoogleMap(
+            //getting google map controller
+            onMapCreated: ((GoogleMapController controller)=> _mapController.complete(controller)),
               initialCameraPosition: CameraPosition(target: _pDevaragudda, zoom: 13),
               markers: {
                  Marker(
@@ -82,9 +87,18 @@ class _MapPageState extends State<MapPage> {
       if (currentLocation.latitude != null && currentLocation.longitude != null) {
         setState(() {
           _currentP = LatLng(currentLocation.latitude!, currentLocation.longitude!);
-          print(_currentP);
+          // print(_currentP);
+          //move camera to new position
+          cameraToPosition(_currentP!);
         });
       }
     });
+  }
+
+  //update camera position accoring to current location of the user. camera view moving accordingly.
+  Future<void> cameraToPosition(LatLng pos)async{
+    final GoogleMapController controller = await _mapController.future;
+    final CameraPosition _newCameraPosition = CameraPosition(target: pos, zoom: 13);
+    controller.animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
   }
 }
