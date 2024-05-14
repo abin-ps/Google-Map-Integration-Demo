@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:google_map_integration_demo/constants.dart';
@@ -42,25 +41,25 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _currentP == null
-          ? Center(
+          ? const Center(
               child: Text('Loading..'),
             )
           : GoogleMap(
               //getting google map controller
               onMapCreated: ((GoogleMapController controller) => _mapController.complete(controller)),
-              initialCameraPosition: CameraPosition(target: _pDevaragudda, zoom: 13),
+              initialCameraPosition: const CameraPosition(target: _pDevaragudda, zoom: 13),
               markers: {
                 Marker(
-                  markerId: MarkerId("_currentLocation"),
+                  markerId: const MarkerId("_currentLocation"),
                   icon: BitmapDescriptor.defaultMarker,
                   position: _currentP!,
                 ),
-                Marker(
+               const Marker(
                   markerId: MarkerId("_sourceLocation"),
                   icon: BitmapDescriptor.defaultMarker,
                   position: _pDevaragudda,
                 ),
-                Marker(
+               const Marker(
                   markerId: MarkerId("_destinationLocation"),
                   icon: BitmapDescriptor.defaultMarker,
                   position: _pRaneBennur,
@@ -139,7 +138,7 @@ class _MapPageState extends State<MapPage> {
 
   //updating polylines map - which then used to draw line between origin and destination points
   void generatePolyLineFromPoints(List<LatLng> polylineCoordinates) async {
-    PolylineId id = PolylineId("poly"); //if we need to draw line for more than one path then may need different ids for each. example: consider i have two paths, 1st one direction from a to b and 2nd one is c to d. 
+    PolylineId id = const PolylineId("poly"); //if we need to draw line for more than one path then may need different ids for each. example: consider i have two paths, 1st one direction from a to b and 2nd one is c to d. 
     Polyline polyline = Polyline(
       polylineId: id,
       color: Colors.blue,
